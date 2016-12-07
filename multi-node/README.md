@@ -7,7 +7,9 @@ I would love to speed up provisioning and slim down resources in a future update
 ## Eventual Features:
 * tweaks for handling other network vendor virtual devices like
   * CSR 1000V
-  * ASAv is that even possible?
+  * ASAv (need to research)
   * vSRX
   * vMX
+  * Cumulus-vx 
+  * IOSXRv
 * Ansible use cases & testing
