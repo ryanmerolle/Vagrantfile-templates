@@ -1,0 +1,63 @@
+---
+- name: eos-1
+  device-type: network
+  box: vEOS-lab-4.17.2F
+  cpu_count: 1
+  memory: 1536
+  interfaces:
+    - name: p2p-link1-2
+    - name: p2p-link1-3
+    - name: access0
+  forwarded_ports:
+    - name: ssh
+      guest: 22
+      host: 12022
+    - name: https
+      guest: 443
+      host: 12443
+- name: eos-2
+  device-type: network
+  box: vEOS-lab-4.17.2F
+  cpu_count: 1
+  memory: 1536
+  interfaces:
+    - name: p2p-link1-2
+    - name: p2p-link2-3
+    - name: access1
+  forwarded_ports:
+    - name: ssh
+      guest: 22
+      host: 13022
+    - name: https
+      guest: 443
+      host: 13443
+- name: eos-3
+  device-type: network
+  box: vEOS-lab-4.17.2F
+  cpu_count: 1
+  memory: 1536
+  interfaces:
+    - name: p2p-link1-3
+    - name: p2p-link2-3
+  forwarded_ports:
+    - name: ssh
+      guest: 22
+      host: 14022
+    - name: https
+      guest: 443
+      host: 14443
+- name: linux-vm
+  device-type: server
+  box: minimal/xenial64
+  cpu_count: 1
+  memory: 512
+  provision: apt-get update; apt-get install lldpd -y;service lldpd start
+  interfaces:
+    - name: access0
+      ip: 10.0.1.100
+    - name: access1
+      ip: 10.0.2.100
+  forwarded_ports:
+    - name: ssh
+      guest: 22
+      host: 11042

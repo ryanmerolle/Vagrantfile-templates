@@ -1,0 +1,47 @@
+# Vagrantfile for the advanced setup using YAML tutorial
+
+# Script configuration:
+#
+# use host.yaml in current directory to define the lab
+
+Vagrant.require_version ">= 1.8.0" # sets minimum Vagrant version to allow for clone linking
+
+# Require YAML module
+require 'yaml' # enables yaml
+
+# Read YAML file with box details
+hosts = YAML.load_file('hosts.yaml')
+
+# Lab definition begins here
+Vagrant.configure("2") do |config|
+  hosts.each do |host|
+    config.vm.define host["name"] do |srv|
+      srv.vm.box = host["box"]
+      if host["device-type"] = "network" # WIP later provision hostnames to eos devices
+        # config.vm.provision "shell", inline: 
+        # need to auto provision hostname
+      else
+        config.vm.hostname = host["name"]
+        config.vm.provision "shell", inline: host["provision"]
+      end
+      config.vm.provider :virtualbox do |vb| # set virtualbox specifics
+        # vb.linked_clone = true # I have not see resource savings
+        vb.cpus = host["cpu_count"]
+        vb.memory = host["memory"]
+      end
+
+      host["forwarded_ports"].each do |port|
+        srv.vm.network :forwarded_port, guest: port["guest"], host: port["host"], id: port["name"]
+      end
+
+      host["interfaces"].each do |interface|
+        if host["device-type"] = "network"
+        	srv.vm.network "private_network", virtualbox__intnet: interface["name"], ip: "169.254.1.11", auto_config: false
+    	   else
+        	srv.vm.network "private_network", virtualbox__intnet: interface["name"], ip: interface["ip"], auto_config: true
+      	end
+      end
+
+    end
+  end
+end
