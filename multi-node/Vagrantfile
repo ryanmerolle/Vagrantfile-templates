@@ -4,7 +4,7 @@
 #
 # use host.yaml in current directory to define the lab
 
-Vagrant.require_version ">= 1.8.0" # sets minimum Vagrant version to allow for clone linking
+# Vagrant.require_version ">= 1.8.0" # sets minimum Vagrant version to allow for clone linking
 
 # Require YAML module
 require 'yaml' # enables yaml
